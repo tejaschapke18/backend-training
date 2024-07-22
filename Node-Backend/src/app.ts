@@ -24,8 +24,13 @@ app.use("/api", userRouter);
 app.use(errorHandler);
 
 const seedDB = async () => {
-  await Country.deleteMany({});
-  await Country.insertMany(seedCountry);
+  const countryCount = await Country.countDocuments();
+  if (countryCount === 0) {
+    await Country.insertMany(seedCountry);
+    console.log("Data Inserted");
+  } else {
+    console.log("Data already present, no need to insert");
+  }
 };
 
 connectToMongoDB()
